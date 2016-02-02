@@ -10,7 +10,7 @@ var sh = require('shelljs');
 var del = require('del');
 
 var paths = {
-  sass: ['./scss/**/*.scss'],
+  sass: ['./src/app/**/*.scss'],
   js: ['./src/app/**/*.js'],
   html: ['./src/app/**/*.tpl.html'],
 };
@@ -20,7 +20,7 @@ var buildHtmlPath = './www/build/html';
 
 gulp.task('default', ['sass']);
 gulp.task('serve', function(callback) {
-  runSequence('build-clean',
+  runSequence('build-clean', 'sass-ionic',
     ['sass', 'js', 'html'],
     'watch',
     callback);
@@ -30,7 +30,7 @@ gulp.task('build-clean', function() {
   return del(buildPath + '/*');
 });
 
-gulp.task('sass', function(done) {
+gulp.task('sass-ionic', function(done) {
   gulp.src('./scss/ionic.app.scss')
     .pipe(sass())
     .on('error', sass.logError)
@@ -41,6 +41,14 @@ gulp.task('sass', function(done) {
     .pipe(rename({ extname: '.min.css' }))
     .pipe(gulp.dest('./www/css/'))
     .on('end', done);
+});
+
+gulp.task('sass', function() {
+  gulp.src(paths.sass)
+    .pipe(sass())
+    .on('error', sass.logError)
+    .pipe(concat('build.css'))
+    .pipe(gulp.dest(buildPath));
 });
 
 gulp.task('watch', function() {
