@@ -11,4 +11,13 @@ angular.module('starter')
           }
         }
       })
+      .state('tab.chat-Detail', {
+        url: '/chat/:chatId',
+        views: {
+          'tab-chat': {
+            templateUrl: 'build/html/Chat/Detail/ChatDetail.tpl.html',
+            controller: 'ChatDetailCtrl'
+          }
+        }
+      })
   });
