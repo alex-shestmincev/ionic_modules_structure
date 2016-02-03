@@ -1,13 +1,23 @@
 var gulp = require('gulp');
 var runSequence = require('run-sequence');
 var gutil = require('gulp-util');
-var bower = require('bower');
 var concat = require('gulp-concat');
 var sass = require('gulp-sass');
+var debug = require('gulp-debug');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
+var remember = require('gulp-remember');
+var cached = require('gulp-cached');
+var gulpIf = require('gulp-if');
+var sourcemaps = require('gulp-sourcemaps');
+
+var bower = require('bower');
 var sh = require('shelljs');
 var del = require('del');
+
+var isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+var isProduction = process.env.NODE_ENV === 'production';
+
 
 var paths = {
   sass: ['./src/app/**/*.scss'],
@@ -45,8 +55,11 @@ gulp.task('sass-ionic', function(done) {
 
 gulp.task('sass', function() {
   gulp.src(paths.sass)
+    .pipe(cached('sass'))
+    .pipe(debug())
     .pipe(sass())
     .on('error', sass.logError)
+    .pipe(remember('sass'))
     .pipe(concat('build.css'))
     .pipe(gulp.dest(buildPath));
 });
@@ -66,6 +79,9 @@ gulp.task('install', ['git-check'], function() {
 
 gulp.task('js', function() {
   return gulp.src(paths.js)
+    .pipe(cached('js'))
+    .pipe(debug())
+    .pipe(remember('js'))
     .pipe(concat('build.js'))
     .pipe(gulp.dest(buildPath));
 });
@@ -74,15 +90,6 @@ gulp.task('html', function() {
   return gulp.src(paths.html)
     .pipe(gulp.dest(buildHtmlPath));
 });
-
-
-gulp.task('js-prod', function() {
-  return gulp.src(paths.js)
-    .pipe(uglify())
-    .pipe(concat('build.js'))
-    .pipe(gulp.dest(buildPath));
-});
-
 
 
 gulp.task('git-check', function(done) {
