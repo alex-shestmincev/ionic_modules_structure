@@ -1,6 +1,7 @@
 angular.module('starter.controllers', [])
-  .controller('AppCtrl', function($scope, $state) {
-    $scope.goTo = function goTo(name,options) {
-      $state.go(name, options);
-    }
+  .controller('AppCtrl', function($scope, $state, $ionicSideMenuDelegate) {
+
+    $scope.toggleMenu = function() { console.log('toggleMenu')
+      $ionicSideMenuDelegate.toggleLeft();
+    };
   });

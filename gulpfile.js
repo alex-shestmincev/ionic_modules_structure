@@ -28,7 +28,11 @@ var paths = {
 var buildPath = './www/build';
 var buildHtmlPath = './www/build/html';
 
-gulp.task('default', ['sass']);
+gulp.task('build', function(callback) {
+  runSequence('build-clean', 'sass-ionic',
+    ['sass', 'js', 'html'],
+    callback);
+});
 gulp.task('serve', function(callback) {
   runSequence('build-clean', 'sass-ionic',
     ['sass', 'js', 'html'],

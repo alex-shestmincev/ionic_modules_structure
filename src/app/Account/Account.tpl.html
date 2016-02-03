@@ -1,4 +1,9 @@
 <ion-view view-title="Account" >
+
+  <ion-nav-buttons side="left">
+    <button class="button button-icon button-clear ion-navicon" ng-click="toggleMenu()"></button>
+  </ion-nav-buttons>
+
   <ion-content>
     <ion-list>
       <ion-toggle  ng-model="settings.enableFriends" class="accountSetting">
